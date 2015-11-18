@@ -9,6 +9,10 @@ import java.util.Vector;
 /**核心算法
  * @author Jeremie
  *
+ * TODO 实现新的生成算法
+ * TODO 实现自动插旗算法
+ * TODO 实现翻转提示算法
+ *
  */
 public class Core {
 	
@@ -65,8 +69,8 @@ public class Core {
 	
 	/**
 	 * 初始化
-	 * @param lx
-	 * @param ly
+	 * @param lx 长
+	 * @param ly 宽
 	 * @param iB 雷数
 	 * @return 创建成功
 	 */
@@ -98,14 +102,14 @@ public class Core {
 	/**
 	 * 创建地雷
 	 * 参数为不可为地雷的坐标
-	 * @param nx
-	 * @param ny
-	 * @return 
+	 * @param nx 点击坐标x
+	 * @param ny 点击坐标y
+	 * @return true
 	 */
 	public boolean Create( int nx, int ny) {
 		
-		// 生成雷
-		Vector<Vector2D> vd = new Vector<Vector2D>();
+		// 生成雷  TODO 实现新的生成算法
+		Vector<Vector2D> vd = new Vector<>();
 		for (int y = 0; y < data.length; y++) {	// y
 			for (int x = 0; x < data[y].length; x++) {		// x
 				if ( x != nx || y != ny ) {		// 不是指定项
@@ -173,8 +177,8 @@ public class Core {
 	
 	/**
 	 * 点击
-	 * @param x
-	 * @param y
+	 * @param x 点击坐标x
+	 * @param y 点击坐标y
 	 * @return 实际内容
 	 */
 	private Flag Hit( int x, int y) {
@@ -187,7 +191,7 @@ public class Core {
 	
 	/**
 	 * 随机数生成器
-	 * @param max
+	 * @param max 随机数最大值
 	 * @return	结果取值范围 0~max
 	 */
 	private int random( int max) {
@@ -196,8 +200,8 @@ public class Core {
 	
 	/**
 	 * isBoom
-	 * @param x
-	 * @param y
+	 * @param x 坐标x
+	 * @param y 坐标y
 	 * @return true 1		false 0
 	 */
 	private int isBoom( int x, int y) {
@@ -210,9 +214,9 @@ public class Core {
 	
 	/**
 	 * 设置标志
-	 * @param x
-	 * @param y
-	 * @param n
+	 * @param x 坐标x
+	 * @param y 坐标y
+	 * @param n 标志n
 	 */
 	private void setF( int x, int y, int n) {
 		switch (n) {
@@ -256,22 +260,21 @@ public class Core {
 			System.err.println("setF default");
 			break;
 		}
-		return;
 	}
 	
 	/**
 	 * 泛洪填充算法	flood fill 
-	 * @param hx
-	 * @param hy
+	 * @param hx 宽
+	 * @param hy 高
 	 */
 	public Flag FloodFill( int hx, int hy) {
-		Stack<Vector2D> stack = new Stack<Vector2D>();
+		Stack<Vector2D> stack = new Stack<>();
 		stack.push( new Vector2D(hx, hy));
 		do {
 			Vector2D v2d = stack.pop();
 			int x = v2d.x;
 			int y = v2d.y;
-			if ( mask[y][x] == false ) {
+			if ( !mask[y][x] ) {
 				if ( isFlag(x, y) ) {
 					setFlag(x, y);
 				}
@@ -325,23 +328,23 @@ public class Core {
 
 	/**
 	 * 转换小旗
-	 * @param x
-	 * @param y
+	 * @param x 坐标x
+	 * @param y 坐标y
 	 * @return		成功true		mask该位置为true翻开则false
 	 */
 	public boolean setFlag( int x, int y) {
-		return setFlag(x, y,  ( sf[y][x] == true ? false : true ) );	// 翻转
+		return setFlag(x, y,  ( !sf[y][x] ) );	// 翻转
 	}
 	
 	/**
 	 * 设置小旗
-	 * @param x
-	 * @param y
+	 * @param x 坐标x
+	 * @param y 坐标y
 	 * @param f	true插上 false去除
 	 * @return		成功true		mask该位置为true翻开则false
 	 */
 	public boolean setFlag( int x, int y, boolean f) {
-		if ( mask[y][x] == true ) {
+		if ( mask[y][x] ) {
 			return false;
 		} else {
 			sf[y][x] = f;
@@ -365,9 +368,9 @@ public class Core {
 	
 	/**
 	 * 检测小旗
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x 坐标x
+	 * @param y 坐标
+	 * @return 是否有flag
 	 */
 	public boolean isFlag( int x, int y) {
 		return sf[y][x];
