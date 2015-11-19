@@ -16,7 +16,7 @@ public class Main {
 
         Core core = new Core();
         System.out.println(core.initial(16, 16, 99, true));
-        System.out.println(core.Hit(15, 15));
+        System.out.println(core.Hit(8, 8));
         for (int i = 0; i < core.data.length; i++) {
             for (int j = 0; j < core.data[i].length; j++) {
                 System.out.print("\t" + core.data[i][j].toInt());

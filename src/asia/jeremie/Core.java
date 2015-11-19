@@ -211,7 +211,7 @@ public class Core {
             }
             return true;
         }
-        // 要求可解  使用新生成算法 TODO
+        // 要求可解  使用新生成算法
 
         // 算法思想
         // 要保证可解必须要保证在八联通下只有一个联通域
@@ -234,9 +234,6 @@ public class Core {
         // 边缘数组
         Vector<Vector2D> bd = new Vector<>();
         // 之后每放置一个空位就要将周围的非空位放入数组
-        // 并且从头到尾遍历数组  概率随机+剩余判断确定是否为空位
-        // 概率函数     1/(候选位置-(剩余空位数量-1))
-        // 其中边缘数组中的初始值为初始8格周边的位置
 
         // 放置初始的9块空位   因为可能在边缘   所以放一个才-1计数
         if (isInBound(nx, ny)) {
@@ -272,14 +269,6 @@ public class Core {
             --leftempty;
             bd.remove(r);
             NoDoubleAppend(bd, RemoveNoBoomFromV2D(RemoveOutOfBoundFromV2D(GetAroundV2D(t.x, t.y))));
-        }
-
-        for (int i = 0; i < this.data.length; i++) {
-            for (int j = 0; j < this.data[i].length; j++) {
-                if (this.data[i][j] == Flag.FBN) {
-                    this.data[i][j] = Flag.Boom;
-                }
-            }
         }
 
         if (leftempty != 0) {
