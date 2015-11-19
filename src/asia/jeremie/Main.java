@@ -17,7 +17,7 @@ public class Main {
 //        }
 
         Core core = new Core();
-        System.out.println(core.initial(9, 9, 70, true));
+        System.out.println(core.initial(9, 9, 36, true));
         int x;
         int y;
         Scanner sc = new Scanner(System.in);
@@ -63,7 +63,7 @@ public class Main {
                                             )
                                             :
                                             (
-                                                    core.flag[i][j] ? "F" : "█"
+                                                    core.flag[i][j] ? "▛" : "█"
                                             )
                             )
                     );

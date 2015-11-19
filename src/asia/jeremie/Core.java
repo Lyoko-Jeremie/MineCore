@@ -3,7 +3,7 @@
  */
 package asia.jeremie;
 
-import java.util.Stack;
+import java.util.LinkedList;
 import java.util.ArrayList;
 
 /**
@@ -196,7 +196,7 @@ public class Core {
      */
     private boolean CreateBoom(int nx, int ny) {
         if (!this.Solubility) {     // 不要求可解  使用原生成算法
-            ArrayList<Vector2D> vd = new ArrayList<>();
+            ArrayList<Vector2D> vd = new ArrayList<Vector2D>();
             for (int y = 0; y < data.length; y++) {    // y
                 for (int x = 0; x < data[y].length; x++) {        // x
                     if (x != nx || y != ny) {        // 不是指定项
@@ -241,7 +241,7 @@ public class Core {
         int leftempty = this.lx * this.ly - this.Bi;
 
         // 边缘数组
-        ArrayList<Vector2D> bd = new ArrayList<>();
+        ArrayList<Vector2D> bd = new ArrayList<Vector2D>();
         // 之后每放置一个空位就要将周围的非空位放入数组
 
         // 放置初始的9块空位   因为可能在边缘   所以放一个才-1计数
@@ -297,7 +297,7 @@ public class Core {
      * @return 返回坐标数组
      */
     private ArrayList<Vector2D> GetAroundV2D(int x, int y) {
-        ArrayList<Vector2D> temp = new ArrayList<>();
+        ArrayList<Vector2D> temp = new ArrayList<Vector2D>();
         temp.add(new Vector2D(x - 1, y - 1));
         temp.add(new Vector2D(x - 1, y));
         temp.add(new Vector2D(x - 1, y + 1));
@@ -526,7 +526,7 @@ public class Core {
      * @param hy 高
      */
     public void FloodFill(int hx, int hy) {
-        Stack<Vector2D> stack = new Stack<>();
+        LinkedList<Vector2D> stack = new LinkedList<Vector2D>();
         stack.push(new Vector2D(hx, hy));
         do {
             Vector2D v2d = stack.pop();
