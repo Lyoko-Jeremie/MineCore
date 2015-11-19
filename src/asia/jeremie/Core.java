@@ -436,11 +436,11 @@ public class Core {
     public Flag Hit(int x, int y) {
         if (!areCreate) {        // 未初始化
             create(x, y);
-//			Run.Run.sound.displaySoundBegin();
         }
         FloodFill(x, y);
         return data[y][x];
     }
+
 
     /**
      * 随机数生成器
@@ -525,7 +525,7 @@ public class Core {
      * @param hx 宽
      * @param hy 高
      */
-    public void FloodFill(int hx, int hy) {
+    private Flag FloodFill(int hx, int hy) {
         LinkedList<Vector2D> stack = new LinkedList<Vector2D>();
         stack.push(new Vector2D(hx, hy));
         do {
@@ -538,7 +538,7 @@ public class Core {
                 }
                 mask[y][x] = true;    // 没有翻开就翻开
                 --Mi;
-                if (Flag.F0 == Hit(x, y)) {
+                if (Flag.F0 == data[y][x]) {
                     // 是空	周围入栈
                     if (x - 1 >= 0) {
                         stack.push(new Vector2D(x - 1, y));
@@ -567,6 +567,7 @@ public class Core {
                 }
             }
         } while (!stack.isEmpty());
+        return data[hy][hx];
     }
 
     /**
