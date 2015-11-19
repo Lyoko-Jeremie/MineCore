@@ -265,25 +265,13 @@ public class Core {
 
         // 从周边数组中生成空位
         while (!bd.isEmpty() && leftempty > 0) {
-            // 将处理过且不为空位的设置为FBN 并在算法完成后设置为Boom  以便于RemoveNoBoomFromV2D的运行
-            if (random(bd.size() - leftempty - 1 - 1) == 0) {   // 此处保证随机数生成器均匀性   结果0~max共max+1种
-                // 抽中
-                data[bd.get(0).y][bd.get(0).x] = Flag.F0;
-                --leftempty;
-//                bd.addAll(RemoveNoBoomFromV2D(RemoveOutOfBoundFromV2D(GetAroundV2D(bd.get(i).x, bd.get(i).y))));
-                NoDoubleAppend(bd, RemoveNoBoomFromV2D(RemoveOutOfBoundFromV2D(GetAroundV2D(bd.get(0).x, bd.get(0).y))));
-            } else {
-                // 未抽中
-                if (bd.size() - leftempty < 0) {
-                    // 在不可不抽中下    强制抽中      TODO 修改
-                    data[bd.get(0).y][bd.get(0).x] = Flag.F0;
-                    --leftempty;
-                    NoDoubleAppend(bd, RemoveNoBoomFromV2D(RemoveOutOfBoundFromV2D(GetAroundV2D(bd.get(0).x, bd.get(0).y))));
-                } else {
-                    data[bd.get(0).y][bd.get(0).x] = Flag.FBN;
-                }
-            }
-            bd.remove(0);
+            // 直接在边缘上随机选一个  直到满足
+            int r = random(bd.size() - 1);
+            Vector2D t = bd.get(r);
+            data[t.y][t.x] = Flag.F0;
+            --leftempty;
+            bd.remove(r);
+            NoDoubleAppend(bd, RemoveNoBoomFromV2D(RemoveOutOfBoundFromV2D(GetAroundV2D(t.x, t.y))));
         }
 
         for (int i = 0; i < this.data.length; i++) {
