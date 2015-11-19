@@ -396,6 +396,7 @@ public class Core {
             create(x, y);
 //			Run.Run.sound.displaySoundBegin();
         }
+        FloodFill(x, y);
         return data[y][x];
     }
 
@@ -477,12 +478,12 @@ public class Core {
     }
 
     /**
-     * 泛洪填充算法	flood fill
+     * 翻起操作     使用泛洪填充算法	flood fill
      *
      * @param hx 宽
      * @param hy 高
      */
-    public Flag FloodFill(int hx, int hy) {
+    public void FloodFill(int hx, int hy) {
         Stack<Vector2D> stack = new Stack<>();
         stack.push(new Vector2D(hx, hy));
         do {
@@ -524,7 +525,6 @@ public class Core {
                 }
             }
         } while (!stack.isEmpty());
-        return Hit(hx, hy);
     }
 
     /**
@@ -606,6 +606,15 @@ public class Core {
      */
     public int getFi() {
         return Fi;
+    }
+
+    /**
+     * 是否已经全部解决
+     *
+     * @return 是否
+     */
+    public boolean wasSolubed() {
+        return Bi >= Mi;
     }
 
 

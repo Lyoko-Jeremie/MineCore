@@ -1,6 +1,8 @@
 package asia.jeremie;
 
 
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -15,14 +17,47 @@ public class Main {
 //        }
 
         Core core = new Core();
-        System.out.println(core.initial(16, 16, 99, true));
-        System.out.println(core.Hit(8, 8));
-        for (int i = 0; i < core.data.length; i++) {
-            for (int j = 0; j < core.data[i].length; j++) {
-                System.out.print("\t" + core.data[i][j].toInt());
+        System.out.println(core.initial(9, 9, 70, true));
+        int x = -1;
+        int y = -1;
+        Scanner sc = new Scanner(System.in);
+        x = sc.nextInt();
+        while (x != -1) {
+            y = sc.nextInt();
+
+            Flag o = core.Hit(y, x);
+            if (o == Flag.Boom) {
+                System.out.println("Boom!!!!!!!");
+                showMarix(core, true);
+                break;
             }
-            System.out.println();
+            System.out.println(o);
+            showMarix(core, false);
+            if (core.wasSolubed()) {
+                System.out.println("Solubed");
+                break;
+            }
+            x = sc.nextInt();
         }
 
     }
+
+    public static void showMarix(Core core, boolean showS) {
+        for (int i = 0; i < core.data[0].length; i++) {
+            System.out.print("\t" + i);
+        }
+        System.out.println();
+        for (int i = 0; i < core.data.length; i++) {
+            System.out.print(i);
+            for (int j = 0; j < core.data[i].length; j++) {
+                if (showS) {
+                    System.out.print("\t" + core.data[i][j].toInt());
+                } else {
+                    System.out.print("\t" + (core.mask[i][j] ? (core.data[i][j].toInt() == 0 ? " " : core.data[i][j].toInt()) : "█"));
+                }
+            }
+            System.out.println();
+        }
+    }
+
 }
