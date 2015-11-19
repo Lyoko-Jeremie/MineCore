@@ -275,7 +275,7 @@ public class Core {
             } else {
                 // 未抽中
                 if (bd.size() - leftempty < 0) {
-                    // 在不可不抽中下    强制抽中
+                    // 在不可不抽中下    强制抽中      TODO 修改
                     data[bd.get(0).y][bd.get(0).x] = Flag.F0;
                     --leftempty;
                     NoDoubleAppend(bd, RemoveNoBoomFromV2D(RemoveOutOfBoundFromV2D(GetAroundV2D(bd.get(0).x, bd.get(0).y))));
