@@ -386,6 +386,11 @@ public class Core {
     public void autoFlag() {
         for (int y = 0; y < data.length; y++) {
             for (int x = 0; x < data[y].length; x++) {
+                flag[y][x] = false;
+            }
+        }
+        for (int y = 0; y < data.length; y++) {
+            for (int x = 0; x < data[y].length; x++) {
                 if (mask[y][x]) {
                     if (data[y][x] != Flag.Boom && data[y][x] != Flag.F0) {
                         ArrayList<Vector2D> vd = RemoveOutOfBoundFromV2D(GetAroundV2D(x, y));
@@ -403,8 +408,6 @@ public class Core {
                             }
                         }
                     }
-                } else {
-                    flag[y][x] = false;
                 }
             }
         }

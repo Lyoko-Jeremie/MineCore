@@ -18,8 +18,8 @@ public class Main {
 
         Core core = new Core();
         System.out.println(core.initial(9, 9, 70, true));
-        int x = -1;
-        int y = -1;
+        int x;
+        int y;
         Scanner sc = new Scanner(System.in);
         x = sc.nextInt();
         while (x != -1) {
@@ -32,6 +32,7 @@ public class Main {
                 break;
             }
             System.out.println(o);
+            core.autoFlag();
             showMarix(core, false);
             if (core.wasSolubed()) {
                 System.out.println("Solubed");
@@ -53,7 +54,19 @@ public class Main {
                 if (showS) {
                     System.out.print("\t" + core.data[i][j].toInt());
                 } else {
-                    System.out.print("\t" + (core.mask[i][j] ? (core.data[i][j].toInt() == 0 ? " " : core.data[i][j].toInt()) : "█"));
+                    System.out.print("\t" +
+                            (
+                                    core.mask[i][j] ?
+                                            (
+                                                    core.data[i][j].toInt() == 0 ?
+                                                            " " : core.data[i][j].toInt()
+                                            )
+                                            :
+                                            (
+                                                    core.flag[i][j] ? "F" : "█"
+                                            )
+                            )
+                    );
                 }
             }
             System.out.println();
