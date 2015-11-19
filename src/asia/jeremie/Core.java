@@ -4,7 +4,7 @@
 package asia.jeremie;
 
 import java.util.Stack;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * 核心算法
@@ -32,6 +32,13 @@ public class Core {
      * false 未翻开
      */
     public boolean[][] mask;
+
+    /**
+     * 标旗层 实验性 暂时只实现了自动标旗
+     * TODO 应在泛洪算法中处理冲突问题
+     * TODO 在未来的自动点开算法中使用
+     */
+    public boolean[][] flag;
 
     /**
      * 总大小x
@@ -108,11 +115,13 @@ public class Core {
         // 初始化数组
         data = new Flag[ly][lx];
         mask = new boolean[ly][lx];
+        flag = new boolean[ly][lx];
         sf = new boolean[ly][lx];
         for (int y = 0; y < data.length; y++) {        // y
             for (int x = 0; x < data[y].length; x++) {        // x
                 data[y][x] = Flag.F0;
                 mask[y][x] = false;
+                flag[y][x] = false;
                 sf[y][x] = false;
             }
         }
@@ -187,7 +196,7 @@ public class Core {
      */
     private boolean CreateBoom(int nx, int ny) {
         if (!this.Solubility) {     // 不要求可解  使用原生成算法
-            Vector<Vector2D> vd = new Vector<>();
+            ArrayList<Vector2D> vd = new ArrayList<>();
             for (int y = 0; y < data.length; y++) {    // y
                 for (int x = 0; x < data[y].length; x++) {        // x
                     if (x != nx || y != ny) {        // 不是指定项
@@ -232,7 +241,7 @@ public class Core {
         int leftempty = this.lx * this.ly - this.Bi;
 
         // 边缘数组
-        Vector<Vector2D> bd = new Vector<>();
+        ArrayList<Vector2D> bd = new ArrayList<>();
         // 之后每放置一个空位就要将周围的非空位放入数组
 
         // 放置初始的9块空位   因为可能在边缘   所以放一个才-1计数
@@ -245,7 +254,7 @@ public class Core {
             return false;  // 点击位无效
         }
         // 初始序列
-        Vector<Vector2D> sd = GetAroundV2D(nx, ny);
+        ArrayList<Vector2D> sd = GetAroundV2D(nx, ny);
 
 
         // 遍历处理初始8格并添加边缘 且清除自身
@@ -287,8 +296,8 @@ public class Core {
      * @param y 原点y
      * @return 返回坐标数组
      */
-    private Vector<Vector2D> GetAroundV2D(int x, int y) {
-        Vector<Vector2D> temp = new Vector<>();
+    private ArrayList<Vector2D> GetAroundV2D(int x, int y) {
+        ArrayList<Vector2D> temp = new ArrayList<>();
         temp.add(new Vector2D(x - 1, y - 1));
         temp.add(new Vector2D(x - 1, y));
         temp.add(new Vector2D(x - 1, y + 1));
@@ -309,7 +318,7 @@ public class Core {
      * @param v2 数组2
      * @return 新数组
      */
-    private Vector<Vector2D> NoDoubleAppend(Vector<Vector2D> v1, Vector<Vector2D> v2) {
+    private ArrayList<Vector2D> NoDoubleAppend(ArrayList<Vector2D> v1, ArrayList<Vector2D> v2) {
         // 移除重复元素
         for (Vector2D d : v1) {
             v2 = RemoveObjFromV2D(v2, d);
@@ -324,7 +333,7 @@ public class Core {
      * @param v2d 数组
      * @return 返回移除后的数组
      */
-    private Vector<Vector2D> RemoveOutOfBoundFromV2D(Vector<Vector2D> v2d) {
+    private ArrayList<Vector2D> RemoveOutOfBoundFromV2D(ArrayList<Vector2D> v2d) {
         int i = 0;
         while (i < v2d.size()) {
             if (!isInBound(v2d.get(i).x, v2d.get(i).y)) {
@@ -342,7 +351,7 @@ public class Core {
      * @param v2d 数组
      * @return 返回移除后的数组
      */
-    private Vector<Vector2D> RemoveNoBoomFromV2D(Vector<Vector2D> v2d) {
+    private ArrayList<Vector2D> RemoveNoBoomFromV2D(ArrayList<Vector2D> v2d) {
         int i = 0;
         while (i < v2d.size()) {
             if (data[v2d.get(i).y][v2d.get(i).x] != Flag.Boom) {
@@ -355,13 +364,13 @@ public class Core {
     }
 
     /**
-     * 从Vector<Vector2D>中移除指定元素
+     * 从ArrayList<Vector2D>中移除指定元素
      *
      * @param v2d 数组
      * @param obj 元素
      * @return 返回移除后的数组
      */
-    private Vector<Vector2D> RemoveObjFromV2D(Vector<Vector2D> v2d, Vector2D obj) {
+    private ArrayList<Vector2D> RemoveObjFromV2D(ArrayList<Vector2D> v2d, Vector2D obj) {
         for (int i = 0; i < v2d.size(); i++) {
             if (v2d.get(i).equals(obj)) {
                 v2d.remove(i);
@@ -369,6 +378,36 @@ public class Core {
             }
         }
         return v2d;
+    }
+
+    /**
+     * 自动根据数字状态标旗
+     */
+    public void autoFlag() {
+        for (int y = 0; y < data.length; y++) {
+            for (int x = 0; x < data[y].length; x++) {
+                if (mask[y][x]) {
+                    if (data[y][x] != Flag.Boom && data[y][x] != Flag.F0) {
+                        ArrayList<Vector2D> vd = RemoveOutOfBoundFromV2D(GetAroundV2D(x, y));
+                        int m = 0;
+                        while (vd.size() > m) {
+                            if (mask[vd.get(m).y][vd.get(m).x]) {
+                                vd.remove(m);
+                            } else {
+                                ++m;
+                            }
+                        }
+                        if (data[y][x].toInt() == vd.size() && !vd.isEmpty()) {
+                            for (Vector2D d : vd) {
+                                flag[d.y][d.x] = true;
+                            }
+                        }
+                    }
+                } else {
+                    flag[y][x] = false;
+                }
+            }
+        }
     }
 
 
