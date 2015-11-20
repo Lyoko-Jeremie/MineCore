@@ -434,6 +434,12 @@ public class Core {
      * @return 实际内容
      */
     public Flag Hit(int x, int y) {
+        if (sf[y][x]) {
+            return Flag.FlagA;
+        }
+        if (flag[y][x]) {
+            return Flag.FlagB;
+        }
         if (!areCreate) {        // 未初始化
             create(x, y);
         }

@@ -17,7 +17,7 @@ public class Main {
 //        }
 
         Core core = new Core();
-        System.out.println(core.initial(9, 9, 60, true));
+        System.out.println(core.initial(9, 9, 35, true));
         int x;
         int y;
         Scanner sc = new Scanner(System.in);
