@@ -52,7 +52,27 @@ public class Main {
             System.out.print(i);
             for (int j = 0; j < core.data[i].length; j++) {
                 if (showS) {
-                    System.out.print("\t" + core.data[i][j].toInt());
+                    System.out.print("\t" +
+                            (
+                                    core.data[i][j] == Flag.Boom ?
+
+                                            (
+                                                    core.flag[i][j] ? "▛" : "✿"
+                                            )
+                                            :
+                                            (
+                                                    core.mask[i][j] ?
+                                                            (
+                                                                    core.data[i][j].toInt() == 0 ?
+                                                                            " " : core.data[i][j].toInt()
+                                                            )
+                                                            :
+                                                            (
+                                                                    core.flag[i][j] ? "▛" : "█"
+                                                            )
+                                            )
+                            )
+                    );
                 } else {
                     System.out.print("\t" +
                             (
